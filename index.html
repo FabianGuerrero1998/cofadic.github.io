@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Sitio Estático</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        /* Un toque de suavidad para el scroll */
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-slate-50 text-gray-800 antialiased">
+
+    <nav x-data="{ open: false }" class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="text-2xl font-bold text-blue-600">MiMarca</div>
+                
+                <div class="hidden md:flex space-x-8 font-medium">
+                    <a href="#inicio" class="hover:text-blue-600 transition">Inicio</a>
+                    <a href="#servicios" class="hover:text-blue-600 transition">Servicios</a>
+                    <a href="#contacto" class="hover:text-blue-600 transition">Contacto</a>
+                </div>
+
+                <div class="md:hidden flex items-center">
+                    <button @click="open = !open" class="outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="4 6h16M4 12h16M4 18h16"></path><path x-show="open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div x-show="open" x-transition class="md:hidden bg-white border-t border-gray-100 p-4 space-y-2">
+            <a href="#inicio" class="block px-2 py-1 hover:bg-blue-50">Inicio</a>
+            <a href="#servicios" class="block px-2 py-1 hover:bg-blue-50">Servicios</a>
+            <a href="#contacto" class="block px-2 py-1 hover:bg-blue-50">Contacto</a>
+        </div>
+    </nav>
+
+    <header id="inicio" class="py-20 px-4 text-center bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-4">Sitios Rápidos sin Complicaciones</h1>
+        <p class="text-xl opacity-90 mb-8">Sin Node.js, sin terminal, solo código puro y moderno.</p>
+        <a href="#servicios" class="bg-white text-blue-600 px-8 py-3 rounded-full font-bold hover:shadow-lg transition">Ver más</a>
+    </header>
+
+    <section id="servicios" class="max-w-6xl mx-auto py-20 px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">¿Por qué este método?</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                <div class="text-blue-500 text-3xl mb-4">⚡</div>
+                <h3 class="font-bold text-xl mb-2">Cero Instalación</h3>
+                <p class="text-gray-600">No necesitas descargar ni configurar entornos de desarrollo pesados.</p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                <div class="text-blue-500 text-3xl mb-4">🎨</div>
+                <h3 class="font-bold text-xl mb-2">Diseño Flexible</h3>
+                <p class="text-gray-600">Usa Tailwind CSS directamente para crear interfaces modernas en minutos.</p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                <div class="text-blue-500 text-3xl mb-4">🚀</div>
+                <h3 class="font-bold text-xl mb-2">Ultra Ligero</h3>
+                <p class="text-gray-600">Tu página cargará instantáneamente al no tener dependencias pesadas.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-gray-400 py-10 text-center">
+        <p>&copy; 2026 Mi Proyecto Estático. Hecho con simplicidad.</p>
+    </footer>
+
+</body>
+</html>
