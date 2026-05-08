@@ -1,0 +1,82 @@
+/* 1. Variables de Marca y Configuración General */
+:root {
+    --primary-dark: #0f172a;    /* Azul muy oscuro para Nav/Footer */
+    --secondary-dark: #1e293b;  /* Gris oscuro para hover/detalles */
+    --accent-blue: #2563eb;
+    --accent-orange: #f97316;
+    --bg-light: #f8fafc;
+    --text-main: #1e293b;
+    --glass-white: rgba(255, 255, 255, 0.8);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text-main);
+    background-color: var(--bg-light);
+    line-height: 1.6;
+}
+
+/* 2. Navegación Estilo Oscuro */
+.main-nav {
+    background-color: var(--primary-dark) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.main-nav a {
+    color: #cbd5e1 !important; /* Gris claro para legibilidad */
+    transition: all 0.3s ease;
+}
+
+.main-nav a:hover {
+    color: white !important;
+}
+
+.main-nav a.active {
+    color: var(--accent-orange) !important;
+}
+
+/* 3. Estilo General de Secciones */
+section {
+    padding: 4rem 0;
+    transition: opacity 0.5s ease;
+}
+
+.article-card { 
+    min-height: 400px; 
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+    background: white;
+    border: 1px solid #e2e8f0;
+}
+
+.article-card:hover { 
+    transform: translateY(-8px); 
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent-blue);
+}
+
+/* 4. Tablas y Documentos */
+.doc-table { width: 100%; text-align: left; font-size: 0.875rem; border-collapse: collapse; }
+.doc-table th { background: #f8fafc; padding: 12px; border-bottom: 2px solid #e2e8f0; font-weight: 800; color: #1e293b; }
+.doc-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: #475569; }
+
+/* 5. Footer Profesional */
+.main-footer {
+    background-color: var(--primary-dark);
+    color: #94a3b8;
+    padding: 4rem 0 2rem 0;
+}
+
+.footer-brand {
+    color: white;
+    font-weight: 900;
+    font-size: 1.5rem;
+}
+
+/* 6. Scroll Personalizado */
+.custom-scroll::-webkit-scrollbar { width: 6px; }
+.custom-scroll::-webkit-scrollbar-thumb { background: #64748b; border-radius: 10px; }
+[x-cloak] { display: none !important; }

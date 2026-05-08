@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "titulo": "E-commerce Minimalista",
+    "categoria": "web",
+    "descripcion": "Plataforma de ventas optimizada para conversión con carga ultra rápida.",
+    "tags": ["HTML", "Tailwind", "Alpine"],
+    "imagen": "https://images.unsplash.com/photo-1557821552-17105176677c",
+    "link": "#"
+  },
+  {
+    "id": 2,
+    "titulo": "Hub de Documentación",
+    "categoria": "edu",
+    "descripcion": "Sistema de gestión de archivos y material educativo interactivo.",
+    "tags": ["JSON", "Architecture"],
+    "imagen": "https://images.unsplash.com/photo-1454165833767-027ffea9e772",
+    "link": "#"
+  },
+  {
+    "id": 3,
+    "titulo": "App de Productividad",
+    "categoria": "web",
+    "descripcion": "Dashboard interactivo para gestión de tareas de alto rendimiento.",
+    "tags": ["UI/UX", "Tailwind"],
+    "imagen": "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
+    "link": "#"
+  }
+]

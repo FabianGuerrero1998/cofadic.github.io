@@ -1,0 +1,63 @@
+[
+  {
+    "id": 1,
+    "titulo": "Arquitecturas Estáticas Modernas",
+    "area": "Ingeniería Web",
+    "categoria": "Desarrollo",
+    "descripcion": "Masterclass completa sobre el futuro del desarrollo sin servidores y optimización extrema.",
+    "bibliografia": ["Static Site Secrets - J. Doe", "JAMstack Guide 2026"],
+    "modulos": [
+      {
+        "nombre": "Módulo 1: Fundamentos del Zero-Build",
+        "encuesta_modulo": "https://forms.gle/modulo1",
+        "lecciones": [
+          {
+            "id_lec": "l1",
+            "titulo": "Introducción al Ecosistema",
+            "contenido": "Exploramos por qué la arquitectura sin instalación local está revolucionando la industria.",
+            "fuente": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            "tipo": "video",
+            "terminos": ["CDN", "Edge Computing", "Hydration"],
+            "recursos": ["guia-conceptos.pdf", "esquema-arquitectura.png"]
+          }
+        ]
+      },
+      {
+        "nombre": "Módulo 2: Guía ATS Profesional",
+        "encuesta_modulo": "https://forms.gle/modulo2",
+        "lecciones": [
+          {
+            "id_lec": "l2",
+            "titulo": "Optimización de Perfiles",
+            "contenido": "Aprende a estructurar documentos para que sean legibles por algoritmos de selección.",
+            "fuente": "assets/docs/guia-ats.pdf",
+            "tipo": "pdf",
+            "terminos": ["Keyword Density", "Parsing", "Formatting"],
+            "recursos": ["plantilla-ats.docx"]
+          }
+        ]
+      },
+      {
+        "nombre": "Módulo 3: infografia",
+        "encuesta_modulo": "https://forms.gle/modulo2",
+        "lecciones": [
+          {
+            "id_lec": "l3",
+            "titulo": "Optimización de Perfiles",
+            "contenido": "Aprende a estructurar documentos para que sean legibles por algoritmos de selección.",
+            "fuente": "assets/docs/Infografía Riesgos en Internet.png",
+            "tipo": "pdf",
+            "terminos": ["Keyword Density", "Parsing", "Formatting"],
+            "recursos": ["plantilla-ats.docx"]
+          }
+        ]
+      }      
+    ],
+    "modulo_final": {
+      "titulo": "Certificación: Arquitecto Estático",
+      "resumen_final": "Este curso ha cubierto desde el despliegue en CDNs hasta la lógica de cliente.",
+      "url_formulario": "https://docs.google.com/forms/d/e/1FAIpQLSfD3Uv9u8n_f_m_A/viewform?embedded=true"
+    },
+    "recursos_generales": ["glosario-tech.pdf", "librerias-cdn.zip"]
+  }
+]

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editor Hub Educativo | Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="assets/admin-logic.js"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="admin-body flex h-screen overflow-hidden" x-data="editorHub()">
+
+    <aside class="w-64 sidebar-admin p-6 flex flex-col">
+        <div class="text-xl font-black mb-10 text-orange-500 tracking-tighter">ADMIN_PORTAFOLIO</div>
+        <nav class="space-y-2 flex-1">
+            <a href="dashboard.html" class="block p-3 hover:bg-white/10 rounded-xl transition">Panel General</a>
+            <a href="editar-inicio.html" class="block p-3 hover:bg-white/10 rounded-xl transition">Editar Inicio</a>
+            <a href="editar-portafolio.html" class="block p-3 hover:bg-white/10 rounded-xl transition">Editar Proyectos</a>
+            <a href="editar-hub-educativo.html" class="block p-3 bg-blue-600 rounded-xl font-bold">Hub Educativo</a>
+        </nav>
+        <button @click="saveAll()" class="w-full bg-green-500 p-4 rounded-2xl font-black text-white shadow-lg hover:bg-green-600 transition">
+            EXPORTAR JSON
+        </button>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto p-10 bg-slate-50">
+        <header class="mb-10 flex justify-between items-end">
+            <div>
+                <h1 class="text-4xl font-black text-slate-900">Gestor de Cursos</h1>
+                <p class="text-slate-500">Añade o modifica el contenido del Hub Educativo.</p>
+            </div>
+            <button @click="addCurso()" class="bg-slate-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-600 transition">+ Nuevo Curso</button>
+        </header>
+
+        <div class="space-y-8">
+            <template x-for="(curso, cIdx) in cursos" :key="cIdx">
+                <div class="bg-white border border-slate-200 rounded-[2rem] p-8 shadow-sm">
+                    <div class="flex justify-between mb-6">
+                        <div class="grid grid-cols-2 gap-4 flex-1 mr-4">
+                            <input type="text" x-model="curso.titulo" placeholder="Título del Curso" class="input-admin font-bold text-lg">
+                            <input type="text" x-model="curso.categoria" placeholder="Categoría (Ej: Desarrollo)" class="input-admin">
+                        </div>
+                        <button @click="cursos.splice(cIdx, 1)" class="text-red-500 font-bold px-4">Eliminar</button>
+                    </div>
+
+                    <div class="ml-8 border-l-2 border-slate-100 pl-8 space-y-6">
+                        <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest">Módulos del Curso</h4>
+                        <template x-for="(modulo, mIdx) in curso.modulos" :key="mIdx">
+                            <div class="bg-slate-50 p-6 rounded-2xl relative">
+                                <input type="text" x-model="modulo.nombre" placeholder="Nombre del Módulo" class="input-admin mb-4 bg-white font-bold">
+                                
+                                <div class="space-y-3">
+                                    <template x-for="(lec, lIdx) in modulo.lecciones" :key="lIdx">
+                                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 grid grid-cols-12 gap-4">
+                                            <div class="col-span-4">
+                                                <input type="text" x-model="lec.titulo" placeholder="Título Lección" class="text-sm w-full outline-none font-bold">
+                                                <select x-model="lec.tipo" class="text-[10px] mt-2 block bg-slate-100 rounded px-2">
+                                                    <option value="video">Video (YouTube)</option>
+                                                    <option value="pdf">Documento (PDF)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-span-7">
+                                                <input type="text" x-model="lec.fuente" placeholder="URL Fuente (Youtube embed o ruta assets/docs/)" class="text-xs w-full text-blue-600">
+                                            </div>
+                                            <button @click="modulo.lecciones.splice(lIdx, 1)" class="text-red-400 text-xs">X</button>
+                                        </div>
+                                    </template>
+                                    <button @click="addLeccion(cIdx, mIdx)" class="text-xs font-bold text-blue-600 mt-2">+ Añadir Lección</button>
+                                </div>
+                            </div>
+                        </template>
+                        <button @click="addModulo(cIdx)" class="text-sm font-black text-slate-900">+ Añadir Módulo</button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </main>
+
+    <script>
+        function editorHub() {
+            return {
+                cursos: [],
+                async init() {
+                    this.cursos = await AdminApp.fetchData('cursos.json');
+                },
+                addCurso() {
+                    this.cursos.push({
+                        id: Date.now(),
+                        titulo: '',
+                        area: '',
+                        categoria: '',
+                        descripcion: '',
+                        modulos: [],
+                        modulo_final: { titulo: 'Examen Final', url_formulario: '' }
+                    });
+                },
+                addModulo(cIdx) {
+                    this.cursos[cIdx].modulos.push({ nombre: '', lecciones: [] });
+                },
+                addLeccion(cIdx, mIdx) {
+                    this.cursos[cIdx].modulos[mIdx].lecciones.push({
+                        id_lec: 'l' + Date.now(),
+                        titulo: '',
+                        tipo: 'video',
+                        fuente: '',
+                        contenido: '',
+                        terminos: [],
+                        recursos: []
+                    });
+                },
+                saveAll() {
+                    AdminApp.exportJSON(this.cursos, 'cursos.json');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
