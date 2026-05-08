@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio | Cofadic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        [x-cloak] { display: none !important; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        .content-block { height: auto; min-height: 100px; }
+
+        .article-card { 
+            min-height: 400px; 
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .article-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+    </style>
+</head>
+
+<body class="bg-slate-50 font-sans" x-data="indexApp()">
+
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="text-2xl font-black tracking-tighter text-slate-900">
+                TECH<span class="text-blue-600">JOURNAL</span><span class="text-orange-500">.</span>
+            </div>
+            <div class="hidden md:flex space-x-10 text-sm font-bold uppercase tracking-widest text-slate-600">
+                <a href="index.html" class="hover:text-blue-600 transition">Inicio</a>
+                <a href="portafolio.html" class="text-blue-600">Portafolio</a>
+                <a href="sobre-mi.html" class="hover:text-blue-600 transition">Sobre Mí</a>
+                <a href="hub-educativo.html" class="hover:text-blue-600 transition">Hub Educativo</a>
+                <a href="login.html" class="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-orange-500 transition">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        
+        <section class="mb-12">
+            <div class="max-w-3xl">
+                <span class="text-orange-500 font-bold uppercase text-xs tracking-widest">Plataforma Técnica</span>
+                <h1 class="text-5xl font-black text-slate-900 mt-2 mb-6">Proyecto <span class="text-blue-600">Cofadic</span></h1>
+                <p class="text-slate-600 leading-relaxed text-lg">
+                    Centro especializado de documentación e infraestructura. Esta plataforma centraliza el conocimiento técnico y las metodologías de alta disponibilidad para garantizar una trazabilidad profesional en entornos críticos de TI.
+                </p>
+                <div class="flex gap-4 mt-8">
+                    <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-slate-200 shadow-sm">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                        <span class="text-xs font-bold text-slate-700 uppercase tracking-tighter">Repositorio Activo</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-slate-200 shadow-sm">
+                        <span class="text-xs font-bold text-slate-700 uppercase tracking-tighter">v3.0 Stable</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pt-8 border-t border-slate-200">
+            <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div class="border-l-4 border-orange-500 pl-8">
+                    <span class="text-orange-500 font-black uppercase text-xs tracking-[0.4em]">Expert Knowledge</span>
+                    <h1 class="text-4xl font-black text-slate-900 mt-2 tracking-tighter">Repositorio de <span class="text-slate-400 italic">Ideas</span></h1>
+                </div>
+                
+                <div class="flex flex-wrap gap-2">
+                    <template x-for="cat in categories">
+                        <button @click="filtro = cat" 
+                            :class="filtro === cat ? 'bg-slate-900 text-white ring-4 ring-slate-100 scale-105' : 'bg-white text-slate-500 border border-slate-200 hover:border-orange-400 hover:text-orange-600'" 
+                            class="px-6 py-3 rounded-xl font-black transition-all duration-300 capitalize text-xs tracking-widest shadow-sm" 
+                            x-text="cat"></button>
+                    </template>
+                </div>
+            </header>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6" x-show="!loading" x-cloak>
+                <template x-for="item in filteredProyectos" :key="item.id">
+                    <article class="article-card bg-white border border-slate-100 rounded-[2rem] overflow-hidden group hover:border-blue-100">
+                        
+                        <div class="h-44 overflow-hidden relative shrink-0">
+                            <img :src="item.imagen" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent"></div>
+                            <span x-text="item.categoria" class="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm text-[8px] font-black uppercase text-slate-800 rounded-lg tracking-tighter shadow-sm"></span>
+                        </div>
+                        
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-5 h-5 bg-blue-50 text-blue-600 rounded-md flex items-center justify-center font-black text-[10px]" x-text="item.autor.charAt(0)"></div>
+                                    <span class="text-[9px] font-bold text-slate-400 uppercase" x-text="item.autor"></span>
+                                </div>
+                                <span class="text-[9px] font-black text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full">5 MIN READ</span>
+                            </div>
+
+                            <h3 x-text="item.titulo" class="text-lg font-black text-slate-900 mb-3 group-hover:text-blue-600 transition-colors leading-tight line-clamp-2"></h3>
+                            
+                            <p x-text="item.descripcion" class="text-slate-500 text-xs mb-5 line-clamp-2 leading-relaxed italic"></p>
+                            
+                            <div class="flex flex-wrap gap-1 mb-6">
+                                <template x-for="tag in item.tags">
+                                    <span x-text="'#'+tag" class="text-[8px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded"></span>
+                                </template>
+                            </div>
+
+                            <button @click="openModal(item)" class="mt-auto w-full py-3 bg-slate-50 group-hover:bg-blue-600 text-slate-900 group-hover:text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2">
+                                Abrir Documentación
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                        </div>
+                    </article>
+                </template>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-950 text-slate-400 py-16 mt-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div class="space-y-6">
+                    <div class="text-2xl font-black tracking-tighter text-white">
+                        TECH<span class="text-blue-500">JOURNAL</span><span class="text-orange-500">.</span>
+                    </div>
+                    <p class="text-sm leading-relaxed">
+                        Plataforma de centralización técnica para infraestructuras de alta disponibilidad. Documentando el futuro de la ingeniería TI.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-blue-500 transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                        <a href="#" class="hover:text-orange-500 transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-black text-xs uppercase tracking-widest mb-6">Explorar</h4>
+                    <ul class="space-y-4 text-sm font-bold">
+                        <li><a href="index.html" class="hover:text-blue-500 transition-colors">Inicio</a></li>
+                        <li><a href="portafolio.html" class="hover:text-blue-500 transition-colors">Portafolio Proyectos</a></li>
+                        <li><a href="sobre-mi.html" class="hover:text-blue-500 transition-colors">Sobre el Autor</a></li>
+                        <li><a href="hub-educativo.html" class="hover:text-blue-500 transition-colors">Recursos Académicos</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-black text-xs uppercase tracking-widest mb-6">Soporte y Legal</h4>
+                    <ul class="space-y-4 text-sm font-bold">
+                        <li><a href="#" class="hover:text-orange-500 transition-colors">Documentación de API</a></li>
+                        <li><a href="#" class="hover:text-orange-500 transition-colors">Privacidad</a></li>
+                        <li><a href="#" class="hover:text-orange-500 transition-colors">Términos</a></li>
+                        <li><a href="#" class="hover:text-orange-500 transition-colors">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="text-white font-black text-xs uppercase tracking-widest mb-6">Suscríbete al Hub</h4>
+                    <p class="text-xs italic leading-relaxed">Recibe notificaciones sobre nuevos expedientes técnicos.</p>
+                    <div class="flex flex-col space-y-2">
+                        <input type="email" placeholder="email@ejemplo.com" class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-blue-500 transition-all text-white">
+                        <button class="bg-blue-600 hover:bg-orange-500 text-white font-black text-[10px] uppercase tracking-widest py-3 rounded-xl transition-all">Unirse</button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-[10px] font-bold uppercase tracking-widest">
+                    &copy; 2026 COFADIC PROJECT. TODOS LOS DERECHOS RESERVADOS.
+                </div>
+                <div class="text-[10px] font-bold uppercase tracking-widest flex items-center gap-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    Sistemas Operativos: 100% ONLINE
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div x-show="modalOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4" x-cloak>
+        <div class="fixed inset-0 bg-slate-950/90 backdrop-blur-md" @click="closeModal()" x-transition></div>
+        <div class="bg-white w-full max-w-4xl max-h-[95vh] rounded-[2rem] shadow-2xl z-10 overflow-hidden flex flex-col relative" x-transition>
+            <button @click="closeModal()" class="absolute top-6 right-6 z-50 p-3 bg-slate-100 hover:bg-orange-500 hover:text-white rounded-full transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2.5"/></svg>
+            </button>
+            <div class="flex-grow overflow-y-auto custom-scroll">
+                <div class="p-10 md:p-20 text-center bg-slate-50 border-b border-slate-100">
+                    <span class="text-blue-600 font-black text-xs uppercase tracking-[0.4em] mb-4 block" x-text="selectedItem?.categoria"></span>
+                    <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6 leading-tight max-w-2xl mx-auto" x-text="selectedItem?.titulo"></h2>
+                    <div class="flex items-center justify-center gap-4 text-slate-400 text-[11px] font-bold uppercase tracking-widest">
+                        <span>Escrito por <span class="text-slate-900" x-text="selectedItem?.autor"></span></span>
+                        <span>•</span>
+                        <span>Publicado en Knowledge Hub</span>
+                    </div>
+                </div>
+                <div class="max-w-3xl mx-auto p-10 md:p-16">
+                    <div class="prose prose-slate prose-lg">
+                        <p class="text-slate-600 text-lg leading-loose first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left whitespace-pre-line" x-text="selectedItem?.contenido_full"></p>
+                    </div>
+                    <div class="mt-16 pt-8 border-t border-slate-100">
+                        <h4 class="text-xs font-black uppercase text-slate-400 mb-6 tracking-widest">Fuentes y Recursos Adicionales</h4>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <template x-for="(rec, index) in selectedItem?.recursos_formateados" :key="index">
+                                <a :href="rec.url" target="_blank" class="flex items-center gap-4 p-4 border border-slate-100 rounded-2xl hover:bg-blue-50 transition-colors group">
+                                    <div class="w-10 h-10 bg-slate-100 group-hover:bg-blue-600 group-hover:text-white rounded-xl flex items-center justify-center transition-colors">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-width="2"/></svg>
+                                    </div>
+                                    <span class="text-sm font-bold text-slate-700" x-text="rec.nombre"></span>
+                                </a>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-900 p-4 md:p-10">
+                    <div class="rounded-[2rem] overflow-hidden shadow-2xl">
+                        <template x-if="selectedItem?.tipo !== 'articulo'">
+                            <iframe :src="selectedItem?.link" class="w-full h-[600px] border-none bg-white"></iframe>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function indexApp() {
+            return {
+                proyectos: [],
+                filtro: 'todos',
+                loading: true,
+                modalOpen: false,
+                selectedItem: null,
+                categories: ['todos', 'soporte', 'seguridad', 'gestion', 'infraestructura'],
+                async init() {
+                    const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSIhUWFaq13le7EiCahbXxtEucDrkHLJB89ELL2mgJdx_TRTRt-JHC0WaYagjUndCxORszIOMRD2umL/pub?output=csv';
+                    try {
+                        const response = await fetch(url);
+                        const data = await response.text();
+                        this.proyectos = this.parseCSV(data);
+                    } catch (e) { console.error("Error:", e); }
+                    finally { this.loading = false; }
+                },
+                parseCSV(csv) {
+                    const lines = csv.split('\n');
+                    const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+                    return lines.slice(1).filter(l => l.trim()).map(line => {
+                        const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                        let obj = {};
+                        headers.forEach((h, i) => {
+                            let val = values[i]?.replace(/^"|"$/g, '').trim() || '';
+                            if (h === 'tags') {
+                                obj[h] = val.split(';').map(t => t.trim());
+                            } else if (h === 'recursos_adicionales') {
+                                const partes = val.split(';').filter(p => p.trim() !== '');
+                                obj['recursos_formateados'] = [];
+                                for (let j = 0; j < partes.length; j += 2) {
+                                    if (partes[j] && partes[j+1]) {
+                                        obj['recursos_formateados'].push({ nombre: partes[j].trim(), url: partes[j+1].trim() });
+                                    }
+                                }
+                            } else {
+                                obj[h] = val;
+                            }
+                        });
+                        return obj;
+                    });
+                },
+                get filteredProyectos() {
+                    return this.filtro === 'todos' ? this.proyectos : this.proyectos.filter(p => p.categoria.toLowerCase() === this.filtro);
+                },
+                openModal(item) {
+                    this.selectedItem = item;
+                    this.modalOpen = true;
+                    document.body.style.overflow = 'hidden';
+                },
+                closeModal() {
+                    this.modalOpen = false;
+                    setTimeout(() => { this.selectedItem = null; }, 300);
+                    document.body.style.overflow = 'auto';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
