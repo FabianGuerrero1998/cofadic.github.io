@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub Educativo | Cofadic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        [x-cloak] { display: none !important; }
+        .media-container { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 1.5rem; overflow: hidden; shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); }
+        .media-container iframe, .media-container embed { width: 100%; height: 100%; border: none; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+        .course-card { display: flex; flex-direction: column; height: 100%; }
+    </style>
+</head>
+<body class="bg-slate-50" x-data="hubLogic()">
+
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="text-2xl font-black tracking-tighter text-slate-900">
+                TECH<span class="text-blue-600">JOURNAL</span><span class="text-orange-500">.</span>
+            </div>
+            <div class="hidden md:flex space-x-10 text-sm font-bold uppercase tracking-widest text-slate-600">
+                <a href="index.html" class="hover:text-blue-600 transition">Inicio</a>
+                <a href="portafolio.html" class="hover:text-blue-600 transition">Portafolio</a>
+                <a href="sobre-mi.html" class="hover:text-blue-600 transition">Sobre Mí</a>
+                <a href="hub-educativo.html" class="text-blue-600">Hub Educativo</a>
+                <a href="login.html" class="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-orange-500 transition">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        
+        <section class="mb-16">
+            <div class="grid lg:grid-cols-2 gap-12 items-center bg-white p-10 md:p-16 rounded-[3rem] border border-slate-100 shadow-2xl shadow-slate-200/50 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
+                    <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5L7.5 12l1.41-1.41L12 13.67l3.09-3.08L16.5 12 12 16.5z"/></svg>
+                </div>
+                
+                <div class="relative z-10">
+                    <span class="inline-block px-4 py-1.5 bg-orange-50 text-orange-600 rounded-full font-black uppercase text-[10px] tracking-[0.2em] mb-6">Plataforma de Difusión Técnica</span>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 leading-tight mb-6">
+                        Conectando Futuros: <span class="text-blue-600 block">Alfabetización Digital</span>
+                    </h1>
+                    <div class="flex gap-4">
+                        <div class="flex items-center gap-2 px-5 py-2.5 bg-slate-900 rounded-2xl shadow-lg">
+                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                            <span class="text-[10px] font-black text-white uppercase tracking-widest">Repositorio Activo</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 rounded-2xl">
+                            <span class="text-[10px] font-black text-slate-600 uppercase tracking-widest">v3.0 Stable Build</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative z-10 space-y-6">
+                    <div class="p-8 bg-slate-50 rounded-3xl border border-slate-100">
+                        <p class="text-slate-600 leading-relaxed text-base md:text-lg text-justify font-medium">
+                            El <span class="text-slate-900 font-bold italic">Hub Educativo Cofadic</span> es un ecosistema diseñado para la democratización del conocimiento técnico y metodológico. A través de módulos educativos funcionales, técnicos y digitales, garantizamos una trazabilidad profesional en entornos críticos de TI. Nuestro compromiso es ofrecer recursos de <span class="text-blue-600 font-bold">alta disponibilidad</span> para reducir la brecha digital en la comunidad.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div x-show="!cursoActivo" x-transition>
+            <header class="mb-12">
+                <div class="grid md:grid-cols-3 gap-4 bg-white p-4 rounded-3xl shadow-sm border border-slate-100">
+                    <input type="text" x-model="search" placeholder="Buscar por título, área o tema..." class="md:col-span-2 px-6 py-3 rounded-2xl bg-slate-50 outline-none focus:ring-2 focus:ring-blue-500 font-medium">
+                    <select x-model="filtroCat" class="px-6 py-3 rounded-2xl bg-slate-50 text-slate-600 font-bold outline-none">
+                        <option value="todos">Todas las Categorías</option>
+                        <optgroup label="Desarrollo & Software">
+                            <option value="Ingeniería Frontend">Ingeniería Frontend</option>
+                            <option value="Backend Development">Backend Development</option>
+                            <option value="Mobile Apps">Mobile Apps</option>
+                        </optgroup>
+                        <optgroup label="Cloud & Infraestructura">
+                            <option value="Arquitectura Cloud">Arquitectura Cloud</option>
+                            <option value="Ciberseguridad">Ciberseguridad</option>
+                            <option value="DevOps">DevOps</option>
+                        </optgroup>
+                        <optgroup label="IA & Datos">
+                            <option value="Machine Learning">Machine Learning</option>
+                            <option value="Data Science">Data Science</option>
+                            <option value="Análisis de Datos">Análisis de Datos</option>
+                        </optgroup>
+                        <optgroup label="Negocios & Soporte">
+                            <option value="Project Management">Project Management</option>
+                            <option value="Customer Success">Customer Success</option>
+                            <option value="Soft Skills">Soft Skills</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </header>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <template x-for="curso in cursosFiltrados" :key="curso.id">
+                    <div class="bg-white p-4 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group course-card">
+                        <div class="bg-slate-900 h-48 rounded-[2rem] mb-6 overflow-hidden relative flex-shrink-0">
+                            <div class="absolute top-4 left-4 flex flex-col gap-2">
+                                <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter" x-text="curso.area"></span>
+                                <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter" x-text="curso.categoria"></span>
+                            </div>
+                            <img :src="curso.imagen || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3'" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        
+                        <div class="flex-grow px-2">
+                            <h3 class="text-2xl font-bold text-slate-900 mb-2 leading-tight" x-text="curso.titulo"></h3>
+                            <p class="text-slate-500 text-sm mb-4 line-clamp-3" x-text="curso.descripcion"></p>
+                            
+                            <div class="mb-6">
+                                <h5 class="text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Bibliografía Destacada:</h5>
+                                <div class="flex flex-wrap gap-1">
+                                    <template x-for="bib in curso.bibliografia.slice(0, 2)">
+                                        <span class="text-[10px] bg-slate-50 text-slate-600 px-2 py-1 rounded-md border border-slate-100 italic" x-text="bib"></span>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button @click="seleccionarCurso(curso)" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-black hover:bg-blue-600 transition mt-auto">
+                            Empezar a aprender
+                        </button>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div x-show="cursoActivo" x-cloak>
+            <button @click="cursoActivo = null" class="mb-8 flex items-center gap-2 text-slate-400 hover:text-blue-600 font-bold transition uppercase text-[10px] tracking-widest">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-width="3" stroke-linecap="round"/></svg>
+                Regresar a la biblioteca
+            </button>
+
+            <div class="grid lg:grid-cols-12 gap-8">
+                <aside class="lg:col-span-4">
+                    <div class="bg-white p-6 rounded-[2rem] border border-slate-200 sticky top-28 shadow-sm">
+                        <h2 class="text-xl font-black text-slate-900 mb-1" x-text="cursoActivo?.titulo"></h2>
+                        <div class="flex gap-2 mb-6">
+                            <p class="text-[9px] font-bold text-blue-500 uppercase tracking-widest" x-text="cursoActivo?.area"></p>
+                            <span class="text-slate-300">|</span>
+                            <p class="text-[9px] font-bold text-orange-500 uppercase tracking-widest" x-text="cursoActivo?.categoria"></p>
+                        </div>
+                        
+                        <div class="space-y-6 custom-scrollbar overflow-y-auto max-h-[50vh] pr-2">
+                            <template x-for="(modulo, index) in cursoActivo?.modulos">
+                                <div>
+                                    <h4 class="text-[10px] font-black text-slate-400 uppercase mb-3" x-text="modulo.nombre"></h4>
+                                    <div class="space-y-2">
+                                        <template x-for="lec in modulo.lecciones">
+                                            <button @click="leccionActual = lec; vistaFinal = false" 
+                                                class="w-full text-left p-4 rounded-xl text-sm font-bold transition-all border flex justify-between items-center"
+                                                :class="leccionActual?.id_lec === lec.id_lec ? 'bg-slate-900 border-slate-900 text-white' : 'bg-slate-50 border-transparent text-slate-600 hover:border-slate-200'">
+                                                <span x-text="lec.titulo"></span>
+                                                <span x-show="leccionActual?.id_lec === lec.id_lec" class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                            
+                            <button @click="vistaFinal = true; leccionActual = null" 
+                                class="w-full p-5 rounded-2xl font-black text-xs flex items-center justify-between transition-all mt-4"
+                                :class="vistaFinal ? 'bg-orange-500 text-white shadow-lg' : 'bg-orange-100 text-orange-600 hover:bg-orange-500 hover:text-white'">
+                                <span>CERTIFICACIÓN Y EXAMEN</span>
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </aside>
+
+                <section class="lg:col-span-8">
+                    <div class="bg-white rounded-[2.5rem] p-6 md:p-10 border border-slate-200 shadow-sm min-h-[700px]">
+                        <div x-show="!leccionActual && !vistaFinal" class="text-center py-32">
+                            <div class="w-24 h-24 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl">📚</div>
+                            <h3 class="text-2xl font-black text-slate-900">Bienvenido al curso</h3>
+                            <p class="text-slate-400 mt-2">Selecciona una lección a la izquierda para comenzar.</p>
+                        </div>
+
+                        <div x-show="leccionActual" x-cloak>
+                            <h2 class="text-3xl font-black text-slate-900 mb-8" x-text="leccionActual?.titulo"></h2>
+                            <div class="media-container mb-10">
+                                <template x-if="leccionActual?.tipo === 'video'">
+                                    <iframe :src="leccionActual.fuente" allowfullscreen></iframe>
+                                </template>
+                                <template x-if="leccionActual?.tipo === 'pdf'">
+                                    <embed :src="leccionActual.fuente" type="application/pdf">
+                                </template>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-6 mb-10">
+                                <div class="bg-slate-50 p-6 rounded-3xl">
+                                    <h5 class="text-[10px] font-black uppercase text-slate-400 mb-4 tracking-widest italic">Keywords / Conceptos</h5>
+                                    <div class="flex flex-wrap gap-2">
+                                        <template x-for="t in leccionActual?.terminos">
+                                            <span class="bg-white px-3 py-1 rounded-lg text-[10px] font-black border border-slate-200 text-slate-600" x-text="t"></span>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-6 rounded-3xl">
+                                    <h5 class="text-[10px] font-black uppercase text-slate-400 mb-4 tracking-widest italic">Archivos de Soporte</h5>
+                                    <div class="space-y-2">
+                                        <template x-for="r in leccionActual?.recursos">
+                                            <a href="#" class="flex items-center justify-between bg-white p-3 rounded-xl text-[11px] font-bold text-slate-900 hover:text-blue-600 transition border border-slate-100">
+                                                <span x-text="r"></span>
+                                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2"/></svg>
+                                            </a>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="prose prose-slate max-w-none border-t border-slate-100 pt-8">
+                                <p class="text-slate-600 leading-relaxed text-lg" x-text="leccionActual?.contenido"></p>
+                            </div>
+                        </div>
+
+                        <div x-show="vistaFinal" x-cloak>
+                            <div class="text-center mb-12">
+                                <h2 class="text-4xl font-black text-slate-900 mb-2" x-text="cursoActivo?.modulo_final.titulo"></h2>
+                                <p class="text-slate-500" x-text="cursoActivo?.modulo_final.resumen_final"></p>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                                <div class="bg-blue-600 text-white p-8 rounded-[2rem]">
+                                    <h4 class="font-bold mb-4 uppercase text-xs tracking-widest opacity-80">Bibliografía del Curso</h4>
+                                    <ul class="space-y-2">
+                                        <template x-for="bib in cursoActivo?.bibliografia">
+                                            <li class="text-sm font-medium flex items-center">
+                                                <span class="mr-2">📖</span> <span x-text="bib"></span>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-900 text-white p-8 rounded-[2rem]">
+                                    <h4 class="font-bold mb-4 uppercase text-xs tracking-widest opacity-80">Recursos Generales</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        <template x-for="rg in cursoActivo?.recursos_generales">
+                                            <span class="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold" x-text="rg"></span>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="rounded-[2.5rem] overflow-hidden border-4 border-slate-50 shadow-2xl bg-white">
+                                <iframe :src="cursoActivo?.modulo_final.url_formulario" width="100%" height="800">Cargando...</iframe>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-slate-950 text-slate-400 py-16 mt-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div class="space-y-6">
+                    <div class="text-2xl font-black tracking-tighter text-white">
+                        TECH<span class="text-blue-500">JOURNAL</span><span class="text-orange-500">.</span>
+                    </div>
+                    <p class="text-sm leading-relaxed">
+                        Plataforma de centralización técnica para infraestructuras de alta disponibilidad. Documentando el futuro de la ingeniería TI.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-blue-500 transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                        <a href="#" class="hover:text-orange-500 transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-black text-xs uppercase tracking-widest mb-6">Explorar</h4>
+                    <ul class="space-y-4 text-sm font-bold">
+                        <li><a href="index.html" class="hover:text-blue-500 transition-colors">Inicio</a></li>
+                        <li><a href="portafolio.html" class="hover:text-blue-500 transition-colors">Portafolio Proyectos</a></li>
+                        <li><a href="sobre-mi.html" class="hover:text-blue-500 transition-colors">Sobre el Autor</a></li>
+                        <li><a href="hub-educativo.html" class="text-blue-500">Recursos Académicos</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-black text-xs uppercase tracking-widest mb-6">Soporte y Legal</h4>
+                    <ul class="space-y-4 text-sm font-bold">
+                        <li><a href="#" class="hover:text-orange-500 transition-colors">Documentación de API</a></li>
+                        <li><a href="#" class="hover:text-orange-500 transition-colors">Privacidad</a></li>
+                        <li><a href="#" class="hover:text-orange-500 transition-colors">Términos</a></li>
+                        <li><a href="#" class="hover:text-orange-500 transition-colors">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="text-white font-black text-xs uppercase tracking-widest mb-6">Suscríbete al Hub</h4>
+                    <p class="text-xs italic leading-relaxed">Recibe notificaciones sobre nuevos expedientes técnicos.</p>
+                    <div class="flex flex-col space-y-2">
+                        <input type="email" placeholder="email@ejemplo.com" class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-blue-500 transition-all text-white">
+                        <button class="bg-blue-600 hover:bg-orange-500 text-white font-black text-[10px] uppercase tracking-widest py-3 rounded-xl transition-all">Unirse</button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-[10px] font-bold uppercase tracking-widest">
+                    &copy; 2026 COFADIC PROJECT. TODOS LOS DERECHOS RESERVADOS.
+                </div>
+                <div class="text-[10px] font-bold uppercase tracking-widest flex items-center gap-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    Sistemas Operativos: 100% ONLINE
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    function hubLogic() {
+        return {
+            cursos: [],
+            cursoActivo: null,
+            leccionActual: null,
+            vistaFinal: false,
+            search: '',
+            filtroCat: 'todos',
+
+            async init() {
+                const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRCsXtci1sFySXp3QMnOOyzku9K_RZGG-_DmnNQHTXd43YJJcDyM9yes-QPaGfocu4HYRnWj5PPyve7/pub?output=csv&cacheburst=' + new Date().getTime();
+                
+                try {
+                    const response = await fetch(CSV_URL);
+                    if (!response.ok) throw new Error("No se pudo obtener el CSV");
+                    const data = await response.text();
+                    this.cursos = this.parseCSV(data);
+                } catch (error) {
+                    console.error("Error en la carga:", error);
+                }
+            },
+
+            parseCSV(csvText) {
+                const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== "");
+                const rows = lines.slice(1);
+
+                return rows.map(row => {
+                    const cols = [];
+                    let startValue = 0;
+                    let inQuotes = false;
+
+                    for (let i = 0; i < row.length; i++) {
+                        if (row[i] === '"') inQuotes = !inQuotes;
+                        if (row[i] === ',' && !inQuotes) {
+                            cols.push(row.substring(startValue, i));
+                            startValue = i + 1;
+                        }
+                    }
+                    cols.push(row.substring(startValue));
+
+                    const clean = (str) => {
+                        if (!str) return "";
+                        let s = str.trim();
+                        if (s.startsWith('"') && s.endsWith('"')) s = s.slice(1, -1);
+                        return s.replace(/""/g, '"');
+                    };
+
+                    try {
+                        return {
+                            id: clean(cols[0]),
+                            titulo: clean(cols[1]),
+                            area: clean(cols[2]),
+                            categoria: clean(cols[3]),
+                            descripcion: clean(cols[4]),
+                            bibliografia: clean(cols[5]) ? clean(cols[5]).split(',').map(i => i.trim()) : [],
+                            modulos: JSON.parse(clean(cols[6])),
+                            modulo_final: JSON.parse(clean(cols[7])),
+                            recursos_generales: clean(cols[8]) ? clean(cols[8]).split(',').map(i => i.trim()) : [],
+                            imagen: clean(cols[9]) 
+                        };
+                    } catch (e) {
+                        return null;
+                    }
+                }).filter(c => c !== null);
+            },
+
+            get cursosFiltrados() {
+                return this.cursos.filter(c => {
+                    const s = this.search.toLowerCase();
+                    const matchSearch = c.titulo.toLowerCase().includes(s) || 
+                                      c.descripcion.toLowerCase().includes(s) ||
+                                      c.area.toLowerCase().includes(s) ||
+                                      c.categoria.toLowerCase().includes(s);
+                    
+                    const matchCat = this.filtroCat === 'todos' || c.categoria === this.filtroCat;
+                    return matchSearch && matchCat;
+                });
+            },
+
+            seleccionarCurso(curso) {
+                this.cursoActivo = curso;
+                this.leccionActual = null;
+                this.vistaFinal = false;
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+        }
+    }
+    </script>
+</body>
+</html>
